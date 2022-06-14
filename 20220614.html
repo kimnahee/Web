@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        
+        header{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            background-color: navy;
+        }
+
+        #menu{
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+            text-align: center;
+        }   
+        
+        #menu li{
+            width: 12%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            color: white;
+            list-style-type: none;
+            display: inline-block;
+        }
+        
+        #menu li:hover{
+            background-color: skyblue;
+        }
+        #menu a{
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 30px;
+            text-decoration: none;
+            color: white;
+        }
+        div {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h3 {
+            padding-top: 30px;
+            padding-bottom: 10px;
+        }
+
+        section>h2 {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        section>h5 {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #home li{
+            list-style-type: none;
+            display: inline-block;
+            padding-right: 5px;
+        }
+
+        #home a{
+            text-decoration: none;
+        }
+
+        /* 표 */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        th {
+            border: 1px solid gray;
+            padding: 10px;
+            background-color: rgba(225, 225, 225, 0.315);
+            text-align: center;
+        }
+
+        td {
+            border: 1px solid lightgray;
+            padding: 10px;
+            text-align: right;
+        }
+
+        /* class = day (첫번째) */
+
+        .day span {
+            font-size: small;
+        }
+
+        /* class = city (두번째) */
+        .sum {
+            /* border 수정하기 */
+            color: darkblue;
+            font-weight: bold;
+            background-color: rgba(135, 206, 250, 0.212);
+            border-bottom: 1px dotted darkblue;
+        }
+
+        .A::after {
+            content: "A";
+            font-size: small;
+            margin-left: 3px;
+            padding: 4px 8px 5px 8px;
+            background-color: dodgerblue;
+            border-radius: 100%;
+            color: white;
+        }
+
+        .B::after {
+            content: "B";
+            font-size: small;
+            margin-left: 3px;
+            padding: 4px 8px 5px 8px;
+            background-color: orangered;
+            border-radius: 100%;
+            color: white;
+        }
+
+        .bA::before {
+            content: "A";
+            font-size: small;
+            margin-left: 3px;
+            padding: 4px 8px 5px 8px;
+            background-color: dodgerblue;
+            border-radius: 100%;
+            color: white;
+        }
+
+        .star::before {
+            content: "*";
+            font-size: small;
+            font-weight: bold;
+            color: red;
+            background-color: rgba(221, 160, 221, 0.445);
+            margin-right: 5px;
+            padding: 0px 5px;
+            border-radius: 50%;
+
+        }
+
+        .footer {
+            width: 96%;
+            padding-top: 25px;
+            padding-left: 2%;
+            padding-right: 2%;
+            margin-top: 15px;
+            height: 75px;
+            background-color: aliceblue;
+            font-size: medium;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <ul id="menu">
+            <li><a href="#">바로알기</a></li>
+            <li><a href="#">예방접종 현황</a></li>
+            <li><a href="#">이상반응</a></li>
+            <li><a href="#">뉴스&팩트체크</a></li>
+            <li><a href="#">허위조작정보신고</a></li>
+            <li><a href="#">홍보자료</a></li>
+            <li><a href="#">Q&A모음</a></li>
+            <li><a href="#">알림/서식</a></li>
+        </ul>
+    </header>
+    <div>
+        <nav></nav>
+        <section>
+            <ul id="home">
+                <li><a href="#">home</a></li>>
+                <li><a href="#">예방접종 현황</a></li>>
+                <li><a href="#">시도별 일일 접종 현황</a></li>
+            </ul>
+            <h2>시도별 일일 접종 현황</h2>
+            <hr>
+            <article class="day">
+                <h3>접종실적 총괄<span>(06.14., 00시 기준)</span></h3>
+                <table>
+                    <tr>
+                        <th class="colhead">구분</th>
+                        <th class="colhead">1차접종</td>
+                        <th class="colhead">2차접종</td>
+                        <th class="colhead">3차접종</td>
+                        <th class="colhead">4차접종</td>
+                    </tr>
+                    <tr>
+                        <th>당일 누적 <span class="bA">+<span class="B"></span></span></th>
+                        <td>45,061,152</td>
+                        <td>44,610,957</td>
+                        <td>33,338,740</td>
+                        <td>4,268,918</td>
+                    </tr>
+                    <tr>
+                        <th class="A">당일 실적</th>
+                        <td>322</td>
+                        <td>849</td>
+                        <td>2,570</td>
+                        <td>10,683</td>
+                    </tr>
+                    <tr>
+                        <th class="B">전일 누적</th>
+                        <td>45,060,830</td>
+                        <td>44,610,108</td>
+                        <td>33,336,170</td>
+                        <td>4,258,235</td>
+                    </tr>
+                </table>
+            </article>
+
+            <article class="city">
+                <h3>시도별 접종 현황</h3>
+                <table>
+                    <tr>
+                        <th rowspan="2" class="colhead">구분</th>
+                        <th colspan="2" class="colhead">1차접종</th>
+                        <th colspan="2" class="colhead">2차접종</th>
+                        <th colspan="2" class="colhead">3차접종</th>
+                        <th colspan="2" class="colhead">4차접종</th>
+                    </tr>
+                    <tr>
+                        <th>당일 실적</th>
+                        <th>당일 누계</th>
+                        <th>당일 실적</th>
+                        <th>당일 누계</th>
+                        <th>당일 실적</th>
+                        <th>당일 누계</th>
+                        <th>당일 실적</th>
+                        <th>당일 누계</th>
+                    </tr>
+                    <tr class="sum">
+                        <th>합계</th>
+                        <td>322</td>
+                        <td>45,061,152</td>
+                        <td>849</td>
+                        <td>44,610,957</td>
+                        <td>2,570</td>
+                        <td>33,338,740</td>
+                        <td>10,683</td>
+                        <td>4,268,918</td>
+                    </tr>
+                    <tr>
+                        <th>서울</th>
+                        <td>73</td>
+                        <td>8,335,637</td>
+                        <td>163</td>
+                        <td>8,254,039</td>
+                        <td>595</td>
+                        <td>6,008,333</td>
+                        <td>1,932</td>
+                        <td>690,210</td>
+                    </tr>
+                    <tr>
+                        <th>부산</th>
+                        <td>20</td>
+                        <td>2,878,141</td>
+                        <td>31</td>
+                        <td>2,848,488</td>
+                        <td>167</td>
+                        <td>2,119,664</td>
+                        <td>835</td>
+                        <td>284,626</td>
+                    </tr>
+                    <tr>
+                        <th>대구</th>
+                        <td>17</td>
+                        <td>2,018,348</td>
+                        <td>44</td>
+                        <td>1,995,058</td>
+                        <td>116</td>
+                        <td>1,393,998</td>
+                        <td>391</td>
+                        <td>143,675</td>
+                    </tr>
+                    <tr>
+                        <th>인천</th>
+                        <td>16</td>
+                        <td>2,566,621</td>
+                        <td>34</td>
+                        <td>2,541,373</td>
+                        <td>123</td>
+                        <td>1,893,424</td>
+                        <td>542</td>
+                        <td>224,318</td>
+                    </tr>
+                    <tr>
+                        <th>광주</th>
+                        <td>10</td>
+                        <td>1,262,013</td>
+                        <td>31</td>
+                        <td>1,249,938</td>
+                        <td>74</td>
+                        <td>962,254</td>
+                        <td>293</td>
+                        <td>133,721</td>
+                    </tr>
+                    <tr>
+                        <th>대전</th>
+                        <td>9</td>
+                        <td>1,245,433</td>
+                        <td>18</td>
+                        <td>1,232,867</td>
+                        <td>72</td>
+                        <td>901,756</td>
+                        <td>259</td>
+                        <td>115,609</td>
+                    </tr>
+                    <tr>
+                        <th>울산</th>
+                        <td>5</td>
+                        <td>968,015</td>
+                        <td>6</td>
+                        <td>958,343</td>
+                        <td>56</td>
+                        <td>715,311</td>
+                        <td>161</td>
+                        <td>64,994</td>
+                    </tr>
+                    <tr>
+                        <th>세종</th>
+                        <td>3</td>
+                        <td>297,735</td>
+                        <td>10</td>
+                        <td>293,840</td>
+                        <td>23</td>
+                        <td>207,166</td>
+                        <td>52</td>
+                        <td>19,721</td>
+                    </tr>
+                </table>
+                <p class="star">상기 통계자료는 예방접종등록에 따라 변동 가능한 잠정 통계임</p>
+            </article>
+        </section>
+        <footer>
+            <div class="footer">
+                <img src="images/footer.png"
+                    style="width: 100px; height: 50px; display: inline-block; float: left; margin-right: 10px;">
+                <p>코로나19 백신 및 예방접종이 창작한 <strong>"예방접종현황"</strong> 저작물은 공공누리의 <strong>제1유형 (출처표시, 상업적 이용가능, 변경
+                        가능)</strong> 조건에 따라 이용할 수 있습니다.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
