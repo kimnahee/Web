@@ -58,7 +58,6 @@
                     <th>연락처</th>
                     <th>생년월일</th>
                     <th>삭제</th>
-                    <th>선택</th>
                     <th><input id="selectedCheck" type="checkbox"></th> 
                     <!-- change를 걸어서 값이 바뀌면 체크박스들이 모두 클릭되게 -->
                 </tr>
@@ -186,36 +185,38 @@
             })
         }
 
-        // 전체 선택 or 전체 선택 해제
-        // document.getElementById('selectedCheck').addEventListener('click', allChecked); //일단 click 사용해서 만들어보기
-        // function allChecked(){ //체크되면 모두 체크되도록
-        //     let checkTr = document.querySelectorAll('#list > tr');
-        //     let maincheck = document.querySelector('input[id="selectedCheck"]');
-        //     console.log(checkTr);
-        //     console.log(maincheck.checked);
-        //     checkTr.forEach(tr => {
-        //         if(maincheck.checked){ //maincheck 가 true 이면 실행
-        //             tr.children[6].children[0].checked = true;
-        //         } else{ //false이면
-        //             tr.children[6].children[0].checked = false;
-        //         }
-        //     })
-        // }
+        // 전체 선택 / 전체 해제
 
         document.getElementById('selectedCheck').addEventListener('change', allChecked); //값이 바뀌면 실행되는..?
         function allChecked(){ //체크되면 모두 체크되도록
-            let checkTr = document.querySelectorAll('#list > tr');
-            let maincheck = document.querySelector('input[id="selectedCheck"]');
-            // console.log(checkTr);
-            // console.log(maincheck.checked);
-            checkTr.forEach(tr => {
-                if(maincheck.checked){ //maincheck 가 true 이면 실행
-                    tr.children[6].children[0].checked = true;
+            let checkBoxes = document.querySelectorAll('#list > tr > td > input[type="checkBox"]'); // id 값이 list인 요소의 tr, td 안의 checkbox 를 모두 선택해서 checkBoxes에 초기화
+            let mainBox = document.querySelector('input[id="selectedCheck"]');
+            console.log(checkBoxes); //checkBoxes에 들어있는 Nodelist 확인(3줄이면 3, 4줄이면 4, ...)
+            checkBoxes.forEach(checkBox => { //checkBoxes의
+                if(mainBox.checked){ //mainBox.checked 가 true(이면 실행)
+                    checkBox.checked = true;
                 } else{ //false이면
-                    tr.children[6].children[0].checked = false;
+                    checkBox.checked = false;
                 }
             })
         }
+
+        // **참고
+        // document.getElementById('selectedCheck').addEventListener('change', allChecked);
+        // function allChecked(){
+        //     let chkBoxes = document.querySelectorAll('#list > tr > td > input[type="checkBox"]'); // checkbox 모두 선택해서 chkBoxes 변수에 담음
+        //     chkBoxes.forEach(checkbox => checkbox.checked = this.checked); //chkBoxes의 모든 요소 순회 > checkbox의 check 속성 = 이벤트를 받는 객체(체크박스).checkek 같도록
+        // }
+
+        // 체크박스중 체크 하나가 해제되면 selectedCheck 박스도 체크 해제되도록
+        // 체크박스 전부 체크하면 selectedCheck 박스도 체크되도록
+        // 체크박스에 이벤트를 달아주고 누를 때 마다 상태 체크 >> all checked 이면 selectedCheck : checked
+        // document.querySelectorAll('#list > tr > td > input[type="checkBox"]').addEventListener('click', check);
+        // function check(){ //체크박스의 상태를 체크하는 check()메소드
+        //     let checkBoxes = document.querySelectorAll('#list > tr > td > input[type="checkBox"]'); // id 값이 list인 요소의 tr, td 안의 checkbox 를 모두 선택해서 checkBoxes에 초기화
+        // }
+        
+
 
         //회원 tr을 생성하는 함수
         function makeTr(member = {}) {
@@ -267,22 +268,6 @@
             td.appendChild(checkbox);
             tr.appendChild(td);
             //check박스(하위요소)만 클릭했는데 td, tr도 같이 콘솔로그에 출력됨
-
-            //checkbox 추가
-            td = document.createElement('td'); // 체크박스를 감싸는 td
-            td.addEventListener('click', function(){
-                console.log('td click');
-            }, false);
-            let checkbox2 = document.createElement('input');
-            checkbox2.type = 'checkbox'; //input에 type 추가 = 'checkbox'
-            checkbox2.addEventListener
-            checkbox2.addEventListener('click', function(ev){
-                console.log('checkbox click');
-                ev.stopPropagation(); //이벤트의 전파를 방지(차단) => checkbox만 눌림
-            }, false)
-            
-            td.appendChild(checkbox2);
-            tr.appendChild(td);
             
             return tr;
         }
