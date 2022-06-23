@@ -34,10 +34,12 @@
         function makeUL(){
             //만들려고 하는 것 => <ul><li>이름</li><li>이름</li><li>이름</li></ul>
             //요소 생성 - createElement
-            let ul = document.createElement('ul'); //ul 이라는 element를 만들겠다
-            students.forEach(elem => { //student의 모든 요소를 forEach로 가지고 옴
+            let ul = document.createElement('ul'); //ul 이라는 element를 만들겠다  ul += '<ul>'
+            students.forEach(elem => { //student의 모든 요소를 forEach로 가지고 옴 
                 let li = document.createElement('li'); //object type : 만들어진 li의 주소를 참조하고 있음
+                
                 li.setAttribute('id', elem.sno); //attributeNode 추가(attribute는 자식요소는 아님) = id 속성으로 elem.sno를 추가
+                
                 let txt = document.createTextNode(`${elem.sno}, ${elem.sname}`); //text node 생성 | elem의 sno, sname을 가져와서 txt 변수에 저장
                 li.appendChild(txt); 
                 // console.log(li);
@@ -63,6 +65,7 @@
             });
             return table;
         }
+
         // console.log(ul);
         // show.appendChild(ul); //부모 요소에 자식 요소를 붙여넣기 | 부모요소.appendChild(자식요소); 
     </script>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>asynch.html</title>
+    <!-- 순차적 실행 -->
+    <script>
+        //동기 vs 비동기
+        //mid에만 settimeout => 1000을 주면
+        //동기방식 : mid가 나오는 것을 1초 기다렸다가 end가 실행됨(start > mid > end)
+        //비동기방식 : mid를 요청하고 바로 end로 넘어가므로 end가 먼저 실행됨(start > end > mid)
+        //먼저 요청한 항목의 처리가 완료되기 전에 다음 처리할 항목으로 넘어감
+        // setTimeout(function, time);매개값 2개 : 실행할 함수, 지연시간(ms단위 | 1000 ms : 1초) | 대표적인 비동기방식 함수
+
+        // setTimeout(function () {
+        //     console.log('start');
+        //     setTimeout(function () {
+        //         console.log('mid');
+        //         setTimeout(function () {
+        //             console.log('end');
+        //         }, 1500);
+        //     }, 1000);
+        // }, 2000);
+
+        //비동기 방식으로 처리하는 대표적인 객체 | 비동기처리 (Ajax) : Asynchronous Javascript And XML
+        //Ajax : 서버 상에 위치한 file 정보를 읽어올 수 있음.
+        let xhtp = new XMLHttpRequest(); //xhtp:객체
+        xhtp.open('get', '../js/dataset.xml'); //요청방식(get | post), 요청URL을 매개값으로 받아옴
+        xhtp.send(); //send()가 호출이 되어야 실제로 서버에서 url을 읽어옴
+        xhtp.onload = loadCallBack; //load 이벤트가 발생 : loadCallBack 실행
+
+        function loadCallBack() { //on~~ : event 관련 메소드/페이지가 로딩되었을 때 실행할 함수
+            // console.log(xhtp.responseText); 
+            // document.write(xhtp.responseText); //html tag도 적용되서 document에 출력됨
+            // let data = JSON.parse(xhtp.responseText);
+            // console.log(data);
+
+            // xml type
+            console.log(this.responseXML); //객체 안에서의 this : 그 객체를 의미 | 예제에서는 xhtp
+            let doc = this.responseXML;
+            // let records = doc.getElementsByTagName('record'); //collection type로 return(for ~ of 사용해도 됨)
+            let records = doc.querySelectorAll('record'); //배열로 반환 => forEach 사용 ok
+            console.log(records[0].children[1].innerHTML);
+
+            let show = document.getElementById('show');
+            //id='show'에 파싱된 데이터를 입력(list로)
+            records.forEach(member => {
+                // console.log(member)
+                // children : 배열 형식 >> 반복문 사용
+                let str = '';
+                for (let i = 0; i < member.children.length; i++) {
+                    str += member.children[i].innerHTML + " ";
+                }
+                console.log(str);
+                let li = document.createElement('li');
+                let txt = document.createTextNode(str);
+                li.appendChild(txt);
+                show.appendChild(li);
+            });
+        }
+
+    </script>
+</head>
+
+<body>
+    <ul id="show">
+        <!-- <li>id, fn, ln, em, sal</li> -->
+    </ul>
+</body>
+
+</html>
