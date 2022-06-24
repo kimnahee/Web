@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dom/member.html</title>
+    <style>
+        form {
+            border: 2px solid green;
+        }
+
+        form>label {
+            display: inline-block;
+            width: 25%;
+            background-color: yellow;
+        }
+
+        #memberName {
+            background-color: aqua;
+        }
+
+        input[name="phone"] {
+            background-color: aquamarine;
+        }
+
+        form>input:nth-of-type(4) {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 회원번호, 회원이름, 연락처, 생년월일 -->
+    <form action="../html\index.html" name="memberFrm">
+        <!-- dom/member.html에서 index.html로 이동하겠다 / onsubmit : submit 이벤트-->
+        <label for="memberId">회원번호</label>
+        <input type="number" name="memberId" id="memberId"><br>
+        <label for="memberId">회원이름</label>
+        <input type="text" name="memberName" id="memberName"><br>
+        <label for="memberId">연락처</label>
+        <input type="text" name="phone" id="phone"><br>
+        <label for="memberId">생년월일</label>
+        <input type="date" name="birth" id="birth"><br>
+        <input type="submit" value="저장">
+        <input type="button" value="수정">
+        <input type="reset" value="초기화">
+        <input type="button" value="선택삭제">
+    </form>
+    <br>
+    <div id="show">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>회원번호</th>
+                    <th>회원이름</th>
+                    <th>연락처</th>
+                    <th>생년월일</th>
+                    <th>삭제</th>
+                    <th><input id="selectedCheck" type="checkbox"></th> 
+                    <!-- change를 걸어서 값이 바뀌면 체크박스들이 모두 클릭되게 -->
+                </tr>
+            </thead>
+            <tbody id="list">
+
+            </tbody>
+        </table>
+
+    </div>
+    <!-- 내부 스크립트 파일 -->
+    <script>
+        //저장 버튼을 누르면 input tag의 값을 읽어와서 list/table 형식으로 출력
+
+        let data = [{
+            member_id: 111111,
+            member_name: '홍길동',
+            phone: '010-1111-2222',
+            birth: '2000-05-01'
+        }, {
+            member_id: 111122,
+            member_name: '김민수',
+            phone: '010-1234-5678',
+            birth: '1998-03-11'
+        }, {
+            member_id: 111133,
+            member_name: '박시민',
+            phone: '010-4321-9875',
+            birth: '2002-12-28'
+        }]; //db 정보
+
+        function showList() {
+            //반복 : tr>td*4, tr>td*4, tr>td*4
+            let tbody = document.getElementById('list'); //id값이 list인 tbody
+            data.forEach(elem => {
+                let tr = makeTr(elem);
+                tbody.appendChild(tr);
+            })
+        }
+
+        showList();
+        document.querySelector('form[name="memberFrm"]').addEventListener('submit',
+        saveMember); //memberFrm이라는 이름을 가진 form을 선택
+
+        //신규멤버 등록
+        function saveMember(evnt) { //매개값이 이벤트값
+            evnt.preventDefault(); //이벤트의 기본기능 차단
+            console.log(document.forms.memberFrm);
+
+            let mId = document.forms['memberFrm']['memberId'].value; //<input name="memberid"> 의 value 속성을 읽어온다
+            let mName = document.forms.memberFrm.memberName.value;
+            let mPhone = document.forms.memberFrm.phone.value;
+            let mBirth = document.forms.memberFrm.birth.value;
+            
+            if(mId == '' || mName == '' || mPhone == '' || mBirth ==''){ //공란이 하나라도 있으면
+                alert('모든 항목을 입력해주세요');
+                return;
+            }
+
+            //이미 존재하는 아이디가 있는지 체크
+            let ids = document.querySelectorAll('#list > tr > td:nth-child(1)');
+            console.log(ids);
+            let exists = false;
+            for(let id of ids){
+                if(id.textContent == mId){
+                    exists = true;
+                    break;
+                }
+            }
+            if(exists){
+                alert('이미 존재하는 아이디입니다.');
+                return;
+            }
+            
+            let member = {
+                member_id: mId,
+                member_name: mName,
+                phone: mPhone,
+                birth: mBirth
+            }; //member object 생성
+
+            let tbody = document.getElementById('list'); //id값이 list인 tbody
+            tbody.appendChild(makeTr(member));
+
+            //초기화(입력&저장 후)
+            document.forms['memberFrm']['memberId'].value ='';
+            document.forms.memberFrm.memberName.value = null;
+            document.forms.memberFrm.phone.value = '';
+            document.forms.memberFrm.birth.value = '2000-01-01';
+            document.forms['memberFrm']['memberId'].focus();
+        }
+
+        //수정 : 버튼을 클릭했을때 내용 변경
+        document.querySelector('input[type="button"]').addEventListener('click', changeMember);//input tag중에 type이 button인 것을 찾아옴 | 이벤트 : 클릭하면 changeMember 함수가 실행되게
+
+        //수정 콜백함수
+        function changeMember(){
+            let mId = document.forms.memberFrm.memberId.value; //찾을 id
+            let mName = document.forms.memberFrm.memberName.value;
+            let mPhone = document.forms.memberFrm.phone.value;
+            let mBirth = document.forms.memberFrm.birth.value;
+            let trAry = document.querySelectorAll('#list > tr'); //list > tr 에 있는 모든 항목을 가져옴
+            // console.log(trAry);
+
+            for(let i = 0; i<trAry.length; i++){
+                if(mId == trAry[i].children[0].textContent) { //tr 믿의 첫 번째 td의 텍스트 요소를 가지고옴
+                    trAry[i].children[1].textContent = mName; 
+                    trAry[i].children[2].textContent = mPhone;
+                    trAry[i].children[3].textContent = mBirth;
+                    break;
+                } 
+            }
+        }
+
+        //선택삭제
+        document.querySelector('input[value="선택삭제"]').addEventListener('click', deleteChecked);//value:선택삭제인 버튼에 클릭 이벤트 발생
+        function deleteChecked(){
+            let checkTr = document.querySelectorAll('#list > tr');
+            console.log(checkTr);
+            checkTr.forEach(tr => {
+                console.log(tr.children[5].children[0].checked); //tr의 6번째 자식요소 | 체크박스의 체크여부 확인
+                if(tr.children[5].children[0].checked){ //true 이면 실행
+                    tr.remove();
+                }
+            })
+        }
+
+        // 전체 선택 / 전체 해제
+
+        document.getElementById('selectedCheck').addEventListener('change', allChecked); //값이 바뀌면 실행되는..?
+        function allChecked(){ //체크되면 모두 체크되도록
+            let checkBoxes = document.querySelectorAll('#list > tr > td > input[type="checkBox"]'); // id 값이 list인 요소의 tr, td 안의 checkbox 를 모두 선택해서 checkBoxes에 초기화
+            let mainBox = document.querySelector('input[id="selectedCheck"]');
+            console.log(checkBoxes); //checkBoxes에 들어있는 Nodelist 확인(3줄이면 3, 4줄이면 4, ...)
+            checkBoxes.forEach(checkBox => { //checkBoxes의
+                if(mainBox.checked){ //mainBox.checked 가 true(이면 실행)
+                    checkBox.checked = true;
+                } else{ //false이면
+                    checkBox.checked = false;
+                }
+            })
+        }
+
+        // **참고
+        // document.getElementById('selectedCheck').addEventListener('change', allChecked);
+        // function allChecked(){
+        //     let chkBoxes = document.querySelectorAll('#list > tr > td > input[type="checkBox"]'); // checkbox 모두 선택해서 chkBoxes 변수에 담음
+        //     chkBoxes.forEach(checkbox => checkbox.checked = this.checked); //chkBoxes의 모든 요소 순회 > checkbox의 check 속성 = 이벤트를 받는 객체(체크박스).checkek 같도록
+        // }
+
+        // 체크박스중 체크 하나가 해제되면 selectedCheck 박스도 체크 해제되도록
+        // 체크박스 전부 체크하면 selectedCheck 박스도 체크되도록
+        // 체크박스에 이벤트를 달아주고 누를 때 마다 상태 체크 >> all checked 이면 selectedCheck : checked
+        // document.querySelectorAll('#list > tr > td > input[type="checkBox"]').addEventListener('click', check);
+        // function check(){ //체크박스의 상태를 체크하는 check()메소드
+        //     let checkBoxes = document.querySelectorAll('#list > tr > td > input[type="checkBox"]'); // id 값이 list인 요소의 tr, td 안의 checkbox 를 모두 선택해서 checkBoxes에 초기화
+        // }
+        
+
+
+        //회원 tr을 생성하는 함수
+        function makeTr(member = {}) {
+            let tr = document.createElement('tr');
+            tr.addEventListener('click', function(){
+                //화살표가 아니므로 this 사용
+                //tr을 누르면 input에 출력되도록?
+                console.log('tr click'); //this > tr
+                document.getElementById('memberId').value = this.children[0].textContent; //첫 번째 children 의 textcontent를 읽어오겠다
+                document.getElementById('memberName').value = this.children[1].textContent; 
+                document.getElementById('phone').value = this.children[2].textContent; 
+                document.getElementById('birth').value = this.children[3].textContent; 
+            }, false) //default : 버블링(하위요소를 클릭해도 상위요소에 이벤트가 전파됨) | true : 캡쳐링으로 전환
+            
+            for (let field in member) {
+                let td = document.createElement('td');
+                let txt = document.createTextNode(member[field]);
+                td.appendChild(txt);
+                tr.appendChild(td);
+            }
+            //삭제버튼 <td><button>삭제</button></td>
+            let td = document.createElement('td');
+            let btn = document.createElement('button'); //object(btn)에 삭제기능 추가
+            // btn.onclick = function() {}
+            btn.addEventListener('click', (e) => 
+             {
+                console.log(this);
+                e.target.parentElement.parentElement.remove(); //<tr><td><button>
+                //this.parentElement.parentElement.remove(); 와 동일
+                //~~화살표 함수 사용 : 대상을 target으로 읽어옴/ function : this~~
+            })
+            btn.textContent = '삭제';
+            td.appendChild(btn);
+            tr.appendChild(td);
+
+            //체크박스 버튼(선택)
+            td = document.createElement('td'); // 체크박스를 감싸는 td
+            td.addEventListener('click', function(){
+                console.log('td click');
+            }, false);
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox'; //input에 type 추가 = 'checkbox'
+            checkbox.addEventListener
+            checkbox.addEventListener('click', function(ev){
+                console.log('checkbox click');
+                ev.stopPropagation(); //이벤트의 전파를 방지(차단) => checkbox만 눌림
+            }, false)
+
+            td.appendChild(checkbox);
+            tr.appendChild(td);
+            //check박스(하위요소)만 클릭했는데 td, tr도 같이 콘솔로그에 출력됨
+            
+            return tr;
+        }
+
+        // function saveFnc() {
+        //     event.preventDefault();
+        //     console.log('saveFnc call');
+
+        //     let mi = document.getElementById('memberId').value; //input tag(id=memberId)의 value 읽어오기
+        //     let mn = document.querySelector('#memberName')
+        //         .value; //queryselector : html의 선택자처럼 사용 | #memberName의 value를 가져오겠다
+        //     let ph = document.getElementsByTagName('input')[2].value; //3번째 (idx = 2) input tag의 값을 가져오겠다
+        //     let bt = document.querySelector('form>input:nth-child(11)')
+        //         .value; //form tag 아래에 input tag(11번째/br 등 다른 태그 신경써야함) / form>input:nth-of-type(4)도 가능
+        //     console.log(`id : ${mi}, name : ${mn}, phone : ${ph}, birth : ${bt}`);
+
+        //     let fields = [mi, mn, ph, bt];
+
+        //     // dom : <table><tr><td>mi</td></td>mn</td> ... </tr></table>
+        //     let table = document.createElement('table');
+        //     // table.border = 1;
+        //     table.setAttribute('border', '1');
+        //     let tr = document.createElement('tr');
+        //     for (let field of fields) {
+        //         let td = document.createElement('td');
+        //         let txt = document.createTextNode(field);
+        //         td.appendChild(txt); //<td>110011</td>
+        //         tr.appendChild(td); //<tr><td>110011</td></tr>
+        //     }
+        //     table.appendChild(tr);
+
+        //     document.body.appendChild(table); //body는 document에서 지원해줌
+
+        // }
+        //innerhtml : 안에 든 값을 html 형식으로 가져옴(ex>tag입력시 tag적용이 됨) | innertext : 안에 든 값을 text 형식으로 가져옴(tag가 텍스트 형식으로 그대로 출력)
+
+    </script>
+</body>
+
+</html>

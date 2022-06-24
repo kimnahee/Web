@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 내부 스크립트 파일 -->
+    <!-- 외부 스크립트 파일 -->
+    <!-- <script src="js/object_constructor.js"></script> -->
+
+    <button id='add'>클릭</button>
+    <script>
+        let btn = document.getElementById('add');
+        console.log(btn);
+        btn.addEventListener('click', function(){
+            console.log(this); 
+            // this: 이벤트를 받는 대상을 가져옴(window x, object x)
+        })  
+    </script>
+</head>
+<body>
+</body>
+</html>

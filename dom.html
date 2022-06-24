@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dom.hmtl</title>
+</head>
+<body>
+    <!-- div.show (class) | div#show (id) -->
+    <div id="show">
+
+    </div> 
+    <script>
+        let students = [{
+            sno: 1,
+            sname: '이희수'
+        },{
+            sno: 2,
+            sname: '권소정'
+        },{
+            sno: 3,
+            sname: '김하은'
+        },{
+            sno: 4,
+            sname: '윤정은'
+        }];
+        // Document Object Model (dom에 존재하는 요소들을 )=> Object : 속성, 기능 
+        // id값으로 요소를 찾아오는 getElementById()
+        let show = document.getElementById('show');
+        show.appendChild(makeUL());
+        show.appendChild(makeTable());
+
+        function makeUL(){
+            //만들려고 하는 것 => <ul><li>이름</li><li>이름</li><li>이름</li></ul>
+            //요소 생성 - createElement
+            let ul = document.createElement('ul'); //ul 이라는 element를 만들겠다  ul += '<ul>'
+            students.forEach(elem => { //student의 모든 요소를 forEach로 가지고 옴 
+                let li = document.createElement('li'); //object type : 만들어진 li의 주소를 참조하고 있음
+                
+                li.setAttribute('id', elem.sno); //attributeNode 추가(attribute는 자식요소는 아님) = id 속성으로 elem.sno를 추가
+                
+                let txt = document.createTextNode(`${elem.sno}, ${elem.sname}`); //text node 생성 | elem의 sno, sname을 가져와서 txt 변수에 저장
+                li.appendChild(txt); 
+                // console.log(li);
+                ul.appendChild(li);
+            });
+            return ul;
+        }
+
+        function makeTable(){
+            //<table> <tr> <td> sno(text) </td> <td> sname </td> </tr> ... 반복 ... </table>
+            let table = document.createElement('table');
+            table.border = "1"; //border => 이 렇게주는게맞는지모르겠다
+            students.forEach(elem => { //students 의 모든 요소에 대해서 순환
+                let tr = document.createElement('tr'); //<tr> 생성
+                for(let fields in elem){ //sno와 sname을 가져옴
+                    let td = document.createElement('td'); //필드별로 <td> 생성
+                    let txt = document.createTextNode(`${elem[fields]}`); //안에 txt값 추가
+                    td.appendChild(txt);
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+                console.log(table);
+            });
+            return table;
+        }
+
+        // console.log(ul);
+        // show.appendChild(ul); //부모 요소에 자식 요소를 붙여넣기 | 부모요소.appendChild(자식요소); 
+    </script>
+</body>
+</html>

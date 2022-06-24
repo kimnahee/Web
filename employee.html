@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let xhtp = new XMLHttpRequest(); //xhtp 객체
+        let url = "MOCK_DATA.json";
+        xhtp.open('get', 'MOCK_DATA.json'); //요청방식, 넘겨받을 데이터 경로
+        xhtp.send();
+        xhtp.onload = makeData;
+        function makeData(){ //JSON 파일 파싱
+            let result = JSON.parse(xhtp.responseText);
+            console.log(result);
+
+            let fields = {
+                id: '사원번호',
+                first_name: '이름',
+                email: '이메일'
+            }
+            
+            let table = document.querySelector('#emp');
+            table.setAttribute('border', '1');
+            let tbody = document.createElement('tbody');
+            //th 태그 만들기(thead는 못쓰려나)
+            for(let field in fields){
+                let th = document.createElement('th');
+                th.innerHTML = fields[field];
+                table.append(th);
+            }
+            
+            result.forEach(data => {
+                let tr = document.createElement('tr');
+                for(let field in fields){
+                    let td = document.createElement('td');
+                    td.innerHTML = data[field];
+                    tr.append(td);
+                }
+                // for(let field in data){
+                //     let td = document.createElement('td');
+                //     td.innerHTML = data[field];
+                //     tr.append(td);
+                // }
+                // console.log(tr);
+                tbody.append(tr);
+            })
+            table.append(tbody);
+        }
+    </script>
+    <table id="emp">
+    </table>
+</body>
+</html>
